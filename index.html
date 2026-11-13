@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>best_luck.cpp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" href="./assets/luck.css">
 <link rel="stylesheet" href="./assets/atom-one-dark.min.css">
+<link rel="stylesheet" href="./assets/luck.css">
 <script src="./assets/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
 </head>
@@ -21,15 +21,18 @@
 <pre><code class="language-cpp">/**
   人生就像一段程序，沿着主线稳定推进，
   直到那次不愿 rollback 的 exception，
-  唯愿选择 keep，往后余生再无 break。
+  惟愿选择 keep，往后余生再无 break。
 **/
-#include &lt;lifetime&gt;
-#include &lt;limits&gt;
-#include &lt;optional&gt;
+#include &lt;lifetime&gt; // 一生
+#include &lt;limits&gt;   // 极限
+#include &lt;optional&gt; // 可选 (你曾不是必然，如今是全部)
 
 struct Life {
+    // 在遇见你之前，我不知道什么是最好的
     Best best = Best::undefined(); 
+    // 运气值为零
     Luck luck = 0;
+    // 但心还活着
     bool heartbeat = true;
     bool alive() const { return heartbeat; }
 };
@@ -38,20 +41,29 @@ int main() {
     Life me;
 
     try {
+        // 原本的我平淡、按部就班的生活
         me.runAsPlanned();
     }
+    // 你的出现打乱了一切
     catch (const You&amp; you) {
+        // 独一无二的你，胜过我以往所有的"最好"
         me.best = std::max(me.best, you);
+        // 惟愿 keep （把你留在身边），不愿 rollback (回到从前)
         me.keep(you);
     }
-
+    // 遇见你本是极低概率事件(难得的缘分)
     if (meet(you)) [[unlikely]] {
+        // 如果遇见你，是我今生最大辛运
         me.luck = std::numeric_limits&lt;Luck&gt;::max();
     }
 
+    // 有生之年
     while (me.alive()) {
+        // 一直珍惜你，再无 break (不离不弃)
         me.cherish(you);
     }
+
+    // 直到一生圆满、无遗憾
     return 0;
 }
 </code></pre>

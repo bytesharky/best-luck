@@ -2,30 +2,101 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>best_luck.cpp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" href="./assets/atom-one-dark.min.css">
 <link rel="stylesheet" href="./assets/luck.css">
-<script src="./assets/highlight.min.js"></script>
-<script>hljs.highlightAll();</script>
+<link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+<title>往后余生，再无 break</title>
 </head>
 <body>
-<div class="mac-window">
-  <div class="mac-titlebar">
-    <span class="dot dot-close"></span>
-    <span class="dot dot-min"></span>
-    <span class="dot dot-max"></span>
-    <div class="title-text">best_luck.cpp</div>
-  </div>
-  <div class="code-wrap">
-<pre><code class="language-cpp">/**
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">// best luck &nbsp;·&nbsp; std=c++20 &nbsp;·&nbsp; optimize = forever</div>
+    <h1>往后余生，<em>再无 break</em></h1>
+    <p class="lede">人生本来沿着主线稳定推进，直到那次不愿 <code>rollback</code> 的 <code>exception</code>，惟愿选择 <code>keep</code>，往后余生再无 <code>break</code>。</p>
+  </header>
+
+  <section class="editor">
+    <div class="bar">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="fname mono">best_luck.cpp</span>
+      <span class="badge mono">最好的幸运</span>
+    </div>
+    <div class="code" id="code"></div>
+  </section>
+
+  <section class="run">
+    <div class="runbar">
+      <button id="runBtn">▶ 编译 & 运行</button>
+      <span class="cmd mono">g++ -std=c++20 -O2 best_luck.cpp -o best_luck &amp;&amp; ./best_luck</span>
+    </div>
+    <div class="term mono" id="term"><div class="hint">// 点一下看看效果</div></div>
+  </section>
+
+  <section class="block">
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <footer>
+    <span><span class="heart">♥</span>&nbsp; 编译于此刻，运行于余生</span>
+    <span class="exit mono">Process exited with code 0 &nbsp;·&nbsp; 一生圆满，无遗憾</span>
+  </footer>
+
+</div>
+
+<script>
+/* ---------- 轻量语法高亮 ---------- */
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const RE = /(&lt;[A-Za-z_]+&gt;)|(\#[A-Za-z_]+)|\b(int|bool|struct|try|catch|const|return|while|if|true|false|void|auto|static|unsigned|nullptr|co_return)\b|\b(std::[A-Za-z_]+)\b|\b(Best|Luck|Life|You|Me|forever)\b|\b(\d+)\b|(\[\[(?:un)?likely\]\])|\b([A-Za-z_]+\()|\b(me|you|best|luck|heartbeat|alive|us)\b/g;
+
+function hlChunk(raw){
+  const s = esc(raw);
+  let out='', last=0, m;
+  RE.lastIndex = 0;
+  while((m = RE.exec(s)) !== null){
+    out += s.slice(last, m.index);
+    const cls = m[1]?'typ':m[2]?'pp':m[3]?'kw':m[4]?'fn':m[5]?'typ':
+                m[6]?'num':m[7]?'attr':m[8]?'fn':'var';
+    out += '<span class="'+cls+'">'+m[0]+'</span>';
+    last = RE.lastIndex;
+  }
+  return out + s.slice(last);
+}
+
+function render(src, el){
+  let inBlock = false;
+  const lines = src.replace(/\n$/,'').split('\n');
+  const html = lines.map((line, idx) => {
+    let out='', i=0;
+    while(i < line.length){
+      if(inBlock){
+        const end = line.indexOf('**/', i);
+        if(end === -1){ out += '<span class="cm">'+esc(line.slice(i))+'</span>'; i = line.length; }
+        else { out += '<span class="cm">'+esc(line.slice(i, end+3))+'</span>'; i = end+3; inBlock = false; }
+        continue;
+      }
+      if(line.startsWith('/**', i)){ inBlock=true; out += '<span class="cm">/**</span>'; i += 3; continue; }
+      if(line.startsWith('//', i)){ out += '<span class="cm">'+esc(line.slice(i))+'</span>'; break; }
+      const rest = line.slice(i);
+      const p = rest.search(/\/\/|\/\*\*/);
+      const chunk = p === -1 ? rest : rest.slice(0, p);
+      if(!chunk.length){ out += esc(line[i]); i++; continue; }
+      out += hlChunk(chunk);
+      i += chunk.length;
+    }
+    return '<div class="row"><span class="no">'+(idx+1)+'</span><span class="txt">'+out+'</span></div>';
+  }).join('');
+  document.getElementById(el).innerHTML = html;
+}
+
+const SRC = `/**
   人生就像一段程序，沿着主线稳定推进，
   直到那次不愿 rollback 的 exception，
   惟愿选择 keep，往后余生再无 break。
 **/
-#include &lt;lifetime&gt; // 一生
-#include &lt;limits&gt;   // 极限
-#include &lt;optional&gt; // 可选 (你曾不是必然，如今是全部)
+#include <lifetime> // 一生
+#include <limits>   // 极限
+#include <optional> // 可选 (你曾不是必然，如今你是全部)
 
 struct Life {
     // 在遇见你之前，我不知道什么是最好的
@@ -45,7 +116,7 @@ int main() {
         me.runAsPlanned();
     }
     // 你的出现打乱了一切
-    catch (const You&amp; you) {
+    catch (const You& you) {
         // 独一无二的你，胜过我以往所有的"最好"
         me.best = std::max(me.best, you);
         // 惟愿 keep （把你留在身边），不愿 rollback (回到从前)
@@ -53,8 +124,8 @@ int main() {
     }
     // 遇见你本是极低概率事件(难得的缘分)
     if (meet(you)) [[unlikely]] {
-        // 如果遇见你，是我今生最大辛运
-        me.luck = std::numeric_limits&lt;Luck&gt;::max();
+        // 如果遇见你，是我今生最大幸运
+        me.luck = std::numeric_limits<Luck>::max();
     }
 
     // 有生之年
@@ -65,9 +136,63 @@ int main() {
 
     // 直到一生圆满、无遗憾
     return 0;
-}
-</code></pre>
-  </div>
-</div>
+}`;
+
+render(SRC, 'code');
+
+/* ---------- 解读卡 ---------- */
+const NOTES = [
+  ['#include <lifetime>','把「一生」写成头文件，此后每个函数都依赖它。'],
+  ['#include <optional>','你曾是「可选」，如今是全部——从未定义到有值。'],
+  ['Best::undefined()','遇见你之前，「最好」这个词还没有定义。'],
+  ['Luck luck = 0','运气归零，等一个人来把它填满。'],
+  ['bool heartbeat = true','唯一没被初始化的真实：心还活着。'],
+  ['catch (const You& you)','你是一场 exception，打乱了一切；const 是独一无二的。'],
+  ['std::max(me.best, you)','你胜过以往所有的「最好」。'],
+  ['keep / rollback','不愿回到从前，只想把你留在身边。'],
+  ['[[unlikely]]','编译器都觉得不可能，可它偏偏发生了。'],
+  ['numeric_limits<Luck>::max()','运气直接拉满，一分不剩。'],
+  ['while (me.alive())','有生之年；循环体里没有 break，不离不弃。'],
+  ['return 0','正常退出：零异常、零遗憾，一生圆满。']
+];
+document.getElementById('grid').innerHTML = NOTES.map(([k,v]) =>
+  '<div class="card"><span class="k mono">'+esc(k)+'</span><span class="v"><span class="arrow">→</span>'+v+'</span></div>'
+).join('');
+
+/* ---------- 真实运行输出 ---------- */
+const OUT = [
+  '[main] 按部就班，风平浪静。',
+  '[exception] 一次最美好的意外。',
+  '[best max] 从此最好的，是 你。',
+  '[keep you] 决定留下 你，不回到从前。',
+  '[luck max] 运气值已拉满：9223372036854775807。',
+  '  [cherish] 第 25 年：仍在珍惜 你。',
+  '  [cherish] 第 50 年：仍在珍惜 你。',
+  '  [cherish] 第 75 年：仍在珍惜 你。',
+  '  [cherish] 第 100 年：仍在珍惜 你。',
+  '',
+  '一生圆满，无遗憾。',
+  '──────────────────────────────',
+  'Process exited with code 0'
+];
+const btn = document.getElementById('runBtn');
+const term = document.getElementById('term');
+btn.addEventListener('click', () => {
+  btn.disabled = true; btn.textContent = 'compiling...';
+  term.innerHTML = '';
+  setTimeout(() => {
+    btn.textContent = 'running...';
+    OUT.forEach((line, i) => {
+      setTimeout(() => {
+        const d = document.createElement('div');
+        d.className = 'line' + (line.indexOf('code 0') > -1 ? ' ok' : '') + (line.indexOf('──') > -1 ? ' rule' : '');
+        d.textContent = line || ' ';
+        term.appendChild(d);
+        if(i === OUT.length-1){ btn.disabled = false; btn.textContent = '▶ 再运行一次'; }
+      }, i * 190);
+    });
+  }, 420);
+});
+</script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 # best luck
 
+example：[https://www.sharky.xin/]
+
 ```cpp
 /**
   人生就像一段程序，沿着主线稳定推进，

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>best_luck.cpp</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="./assets/luck.css">
+<link rel="stylesheet" href="./assets/atom-one-dark.min.css">
+<script src="./assets/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="mac-window">
+  <div class="mac-titlebar">
+    <span class="dot dot-close"></span>
+    <span class="dot dot-min"></span>
+    <span class="dot dot-max"></span>
+    <div class="title-text">best_luck.cpp</div>
+  </div>
+  <div class="code-wrap">
+<pre><code class="language-cpp">/**
+  人生就像一段程序，沿着主线稳定推进，
+  直到那次不愿 rollback 的 exception，
+  唯愿选择 keep，往后余生再无 break。
+**/
+#include &lt;lifetime&gt;
+#include &lt;limits&gt;
+#include &lt;optional&gt;
+
+struct Life {
+    Best best = Best::undefined(); 
+    Luck luck = 0;
+    bool heartbeat = true;
+    bool alive() const { return heartbeat; }
+};
+
+int main() {
+    Life me;
+
+    try {
+        me.runAsPlanned();
+    }
+    catch (const You&amp; you) {
+        me.best = std::max(me.best, you);
+        me.keep(you);
+    }
+
+    if (meet(you)) [[unlikely]] {
+        me.luck = std::numeric_limits&lt;Luck&gt;::max();
+    }
+
+    while (me.alive()) {
+        me.cherish(you);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+</div>
+</body>
+</html>
